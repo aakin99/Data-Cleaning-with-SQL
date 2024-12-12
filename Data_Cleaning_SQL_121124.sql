@@ -1,8 +1,4 @@
-/*
-
-Cleaning Data in SQL Queries
-
-*/
+/* Cleaning Data in SQL Queries */
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -36,6 +32,7 @@ ORDER BY ParcelID
 
 
 -- Finding property addresses with a null value, joining to find subsiquent property address, using isnull to populate null column (35 rows affected)
+
 Select a.ParcelID, a.PropertyAddress, b.ParcelID, b.PropertyAddress, ISNULL(a.PropertyAddress, b.PropertyAddress)
 From Data_Cleaning_SQL.dbo.NashvilleHousing a
 JOIN Data_Cleaning_SQL.dbo.NashvilleHousing b
@@ -44,6 +41,7 @@ JOIN Data_Cleaning_SQL.dbo.NashvilleHousing b
  WHERE a.PropertyAddress is null
 
  -- Updating table to reflect populated property address
+
 UPDATE a
 SET PropertyAddress= ISNULL(a.PropertyAddress, b.PropertyAddress)
 From Data_Cleaning_SQL.dbo.NashvilleHousing a
@@ -145,19 +143,18 @@ WITH RowNumT AS (
 SELECT *,
 	ROW_NUMBER() OVER(
 	PARTITION BY ParcelID,
-				PropertyAddress,
-				SalePrice, 
-				SaleDate,
-				LegalReference 
-				ORDER BY UniqueID) 
-				row_num
+		PropertyAddress,
+		SalePrice, 
+		SaleDate,
+		LegalReference 
+			ORDER BY UniqueID) 
+			row_num
 FROM Data_Cleaning_SQL.dbo.NashvilleHousingRemovedDup
 )
 DELETE 
 -- SELECT *
 From RowNumT
 Where row_num > 1
--- ORDER BY PropertyAddress
  
  -- Removing Unused Cloumns to Prepare Data for Analysis
 
@@ -165,7 +162,7 @@ Where row_num > 1
 From Data_Cleaning_SQL.dbo.NashvilleHousingRemovedDup
 
 ALTER TABLE Data_Cleaning_SQL.dbo.NashvilleHousingRemovedDup
-DROP COLUMN PropertyAddress, TaxDistrict, OwnerAddress, SaleDate, SaleDate2
+DROP COLUMN PropertyAddress, TaxDistrict, OwnerAddress, SaleDate
 
 ALTER TABLE Data_Cleaning_SQL.dbo.NashvilleHousingRemovedDup
 DROP COLUMN SaleDate2
